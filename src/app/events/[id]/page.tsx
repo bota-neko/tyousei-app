@@ -60,23 +60,25 @@ export default async function EventPage({
                 {event.description && <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>{event.description}</p>}
 
                 {isPolling ? (
-                    <div className="glass-panel" style={{ padding: '2rem', maxWidth: '500px', margin: '0 auto' }}>
-                        <h2 style={{ marginBottom: '1.5rem' }}>イベントに参加</h2>
-                        <form action={joinEvent.bind(null, event.id)}>
-                            <div style={{ marginBottom: '1.5rem' }}>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>お名前</label>
-                                <input type="text" name="nickname" required placeholder="表示名を入力" style={{ width: '100%', padding: '0.8rem', borderRadius: 'var(--radius-sm)', border: '1px solid #ccc' }} />
-                            </div>
-                            <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>出欠入力へ進む</button>
-                        </form>
-                    </div>
+                    <>
+                        <div className="glass-panel" style={{ padding: '2rem', maxWidth: '500px', margin: '0 auto' }}>
+                            <h2 style={{ marginBottom: '1.5rem' }}>イベントに参加</h2>
+                            <form action={joinEvent.bind(null, event.id)}>
+                                <div style={{ marginBottom: '1.5rem' }}>
+                                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>お名前</label>
+                                    <input type="text" name="nickname" required placeholder="表示名を入力" style={{ width: '100%', padding: '0.8rem', borderRadius: 'var(--radius-sm)', border: '1px solid #ccc' }} />
+                                </div>
+                                <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>出欠入力へ進む</button>
+                            </form>
+                        </div>
 
-                    <div style={{ marginTop: '3rem' }}>
-                        <ParticipantList
-                            slots={event.slots}
-                            participants={event.participants}
-                        />
-                    </div>
+                        <div style={{ marginTop: '3rem' }}>
+                            <ParticipantList
+                                slots={event.slots}
+                                participants={event.participants}
+                            />
+                        </div>
+                    </>
                 ) : (event.status === 'finalized' || event.status === 'live') ? (
                     <div className="glass-panel" style={{ padding: '2rem', textAlign: 'center' }}>
                         <h2 style={{ marginBottom: '1rem', color: 'var(--success)' }}>開催決定！</h2>
