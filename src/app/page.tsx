@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
       <div className="container" style={{ textAlign: 'center' }}>
-        <section style={{ textAlign: 'center', padding: '6rem 1.5rem', maxWidth: '800px', margin: '0 auto' }}>
+        <section style={{ textAlign: 'center', padding: '4rem 1.5rem', maxWidth: '800px', margin: '0 auto' }}>
           <h1 style={{
             fontSize: 'clamp(2.5rem, 5vw, 4rem)',
             fontWeight: '700',
@@ -15,7 +15,7 @@ export default function Home() {
             スマート<span style={{ fontSize: '0.85em' }}>な</span><br className="sm:hidden" />
             イベント調整<span style={{ fontSize: '0.85em' }}>を</span>。
           </h1>
-          <p style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--text-main)', marginBottom: '3rem', maxWidth: '600px', margin: '0 auto 3rem' }}>
+          <p style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--text-main)', maxWidth: '600px', margin: '0 auto' }}>
             日程調整から当日の受付まで、これひとつで完了。<br />
             参加者のログインやアプリインストールは不要です。
           </p>
