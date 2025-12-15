@@ -155,22 +155,47 @@ export default async function Dashboard({
                     {/* Participants Section */}
                     <section className="glass-panel" style={{ padding: '2rem' }}>
                         <h2 style={{ marginBottom: '1.5rem', fontSize: '1.3rem' }}>参加者 ({event.participants.length})</h2>
-                        <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                        <div style={{ overflowX: 'auto' }}>
                             {event.participants.length === 0 ? (
                                 <p style={{ color: 'var(--text-muted)' }}>まだ回答がありません。</p>
                             ) : (
-                                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '100%', whiteSpace: 'nowrap' }}>
                                     <thead>
                                         <tr style={{ textAlign: 'left', borderBottom: '1px solid rgba(0,0,0,0.1)' }}>
-                                            <th style={{ padding: '0.5rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>名前</th>
+                                            <th style={{ padding: '0.5rem', fontSize: '0.9rem', color: 'var(--text-muted)', position: 'sticky', left: 0, background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(4px)', zIndex: 1 }}>名前</th>
+                                            {event.slots.map(slot => (
+                                                <th key={slot.id} style={{ padding: '0.5rem', fontSize: '0.85rem', color: 'var(--text-muted)', textAlign: 'center', minWidth: '60px' }}>
+                                                    {formatDate(slot.start).split('(')[0]}<br />
+                                                    <span style={{ fontSize: '0.75rem' }}>{formatTime(slot.start)}</span>
+                                                </th>
+                                            ))}
                                             <th style={{ padding: '0.5rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>コメント</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {event.participants.map(p => (
                                             <tr key={p.id} style={{ borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
-                                                <td style={{ padding: '0.75rem 0.5rem', fontWeight: '500' }}>{p.nickname}</td>
-                                                <td style={{ padding: '0.75rem 0.5rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>{p.memo || '-'}</td>
+                                                <td style={{ padding: '0.75rem 0.5rem', fontWeight: '500', position: 'sticky', left: 0, background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(4px)', zIndex: 1, borderRight: '1px solid rgba(0,0,0,0.05)' }}>
+                                                    {p.nickname}
+                                                </td>
+                                                {event.slots.map(slot => {
+                                                    const vote = p.votes.find(v => v.slotId === slot.id)
+                                                    let label = '-'
+                                                    let color = 'var(--text-dim)'
+                                                    if (vote) {
+                                                        if (vote.response === 'yes') { label = '◯'; color = 'var(--primary)'; }
+                                                        else if (vote.response === 'maybe') { label = '△'; color = 'var(--warning)'; }
+                                                        else if (vote.response === 'no') { label = '×'; color = 'var(--text-dim)'; }
+                                                    }
+                                                    return (
+                                                        <td key={slot.id} style={{ padding: '0.75rem 0.5rem', textAlign: 'center', color: color, fontWeight: 'bold' }}>
+                                                            {label}
+                                                        </td>
+                                                    )
+                                                })}
+                                                <td style={{ padding: '0.75rem 0.5rem', color: 'var(--text-muted)', fontSize: '0.9rem', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                    {p.memo || '-'}
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
