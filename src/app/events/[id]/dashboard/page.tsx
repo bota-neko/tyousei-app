@@ -183,10 +183,11 @@ export default async function Dashboard({
                 {/* Sidebar (Right Column) - Admin Controls */}
                 <aside style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
 
-                    {/* Event Settings Card */}
-                    <div className="glass-panel" style={{ padding: '1.5rem' }}>
-                        <h3 style={{ marginBottom: '1rem', fontSize: '1rem', fontWeight: '600', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <span>⚙️</span> 設定
+                    {/* STEP 1: Event Settings */}
+                    <div className="glass-panel" style={{ padding: '1.5rem', borderLeft: '4px solid var(--primary)' }}>
+                        <h3 style={{ marginBottom: '1rem', fontSize: '1rem', fontWeight: '600', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ background: 'var(--primary)', color: 'white', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem' }}>1</span>
+                            基本設定
                         </h3>
                         <form action={updateEventStatus.bind(null, event.id, event.status)}>
                             <div style={{ marginBottom: '1rem' }}>
@@ -207,14 +208,14 @@ export default async function Dashboard({
                             </div>
                             <button type="submit" className="btn btn-secondary" style={{ width: '100%', fontSize: '0.9rem' }}>更新を保存</button>
                         </form>
-
                     </div>
 
-                    {/* Published / Slots Actions */}
+                    {/* STEP 2: Add Dates */}
                     {isDraft && (
-                        <div className="glass-panel" style={{ padding: '1.5rem' }}>
-                            <h3 style={{ marginBottom: '1rem', fontSize: '1rem', fontWeight: '600', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <span>📅</span> 日程追加
+                        <div className="glass-panel" style={{ padding: '1.5rem', borderLeft: '4px solid var(--primary)' }}>
+                            <h3 style={{ marginBottom: '1rem', fontSize: '1rem', fontWeight: '600', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <span style={{ background: 'var(--primary)', color: 'white', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem' }}>2</span>
+                                日程候補の追加
                             </h3>
                             <form action={addEventSlot.bind(null, event.id)} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                                 <div>
@@ -225,35 +226,37 @@ export default async function Dashboard({
                                     <label style={{ fontSize: '0.8rem' }}>終了</label>
                                     <input type="datetime-local" name="end" required style={{ width: '100%', padding: '0.6rem', fontSize: '0.85rem' }} />
                                 </div>
-                                <button type="submit" className="btn btn-secondary" style={{ marginTop: '0.5rem' }}>追加</button>
+                                <button type="submit" className="btn btn-secondary" style={{ marginTop: '0.5rem', background: 'var(--primary)', color: 'white', border: 'none' }}>追加する</button>
                             </form>
                         </div>
                     )}
 
-                    {/* Main Actions */}
-                    <div className="glass-panel" style={{ padding: '1.5rem' }}>
-                        <h3 style={{ marginBottom: '1rem', fontSize: '1rem', fontWeight: '600', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <span>🚀</span> アクション
+                    {/* STEP 3: Actions */}
+                    <div className="glass-panel" style={{ padding: '1.5rem', borderLeft: '4px solid var(--primary)' }}>
+                        <h3 style={{ marginBottom: '1rem', fontSize: '1rem', fontWeight: '600', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ background: 'var(--primary)', color: 'white', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem' }}>{isDraft ? '3' : '★'}</span>
+                            {isDraft ? '募集開始' : 'イベント操作'}
                         </h3>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                             {isDraft && (
                                 <form action={updateEventStatus.bind(null, event.id, 'polling')}>
-                                    <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
+                                    <button type="submit" className="btn btn-primary" style={{ width: '100%', fontWeight: 'bold', padding: '0.8rem' }}>
                                         募集を開始する
                                     </button>
                                     <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem', lineHeight: '1.4' }}>
-                                        募集を開始すると、参加者が投票できるようになります。
+                                        参加者が投票できるようになります。<br />
+                                        ※後からでも設定は変更可能です。
                                     </p>
                                 </form>
                             )}
 
                             {isPolling && (
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                    <a href={`/events/${event.id}`} target="_blank" className="btn btn-primary" style={{ width: '100%' }}>
+                                    <a href={`${process.env.NEXT_PUBLIC_BASE_URL || ''}/events/${event.id}`} target="_blank" className="btn btn-primary" style={{ width: '100%' }}>
                                         公開ページを開く ↗
                                     </a>
-                                    <a href={`/events/${event.id}/export`} className="btn btn-secondary" style={{ width: '100%' }}>
+                                    <a href={`${process.env.NEXT_PUBLIC_BASE_URL || ''}/events/${event.id}/export`} className="btn btn-secondary" style={{ width: '100%' }}>
                                         CSVダウンロード
                                     </a>
                                 </div>
@@ -261,7 +264,7 @@ export default async function Dashboard({
 
                             {isFinalized && (
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                    <a href={`/events/${event.id}`} target="_blank" className="btn btn-primary" style={{ width: '100%' }}>
+                                    <a href={`${process.env.NEXT_PUBLIC_BASE_URL || ''}/events/${event.id}`} target="_blank" className="btn btn-primary" style={{ width: '100%' }}>
                                         案内ページを確認 ↗
                                     </a>
                                     <a href={`/events/${event.id}/reception`} className="btn btn-secondary" style={{ width: '100%', borderColor: 'var(--success)', color: 'var(--success)' }}>
