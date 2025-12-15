@@ -1,27 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* Monochrome HSL Palette */
+  /* Primary: Pure Black */
+  --primary-hue: 0;
+  --primary-sat: 0%;
+  --primary-light: 0%;
+  --primary: hsl(0, 0%, 10%);
+  /* Soft Black */
+  --primary-dark: hsl(0, 0%, 0%);
+  /* Pure Black */
+  --primary-glow: hsl(0, 0%, 80%);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+  /* Backgrounds: White / Light Gray */
+  --bg-hue: 0;
+  --bg-dark: #ffffff;
+  --bg-card: #f9f9f9;
+  --bg-card-hover: #f0f0f0;
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
+  /* Text */
+  --text-main: #111111;
+  --text-muted: #666666;
+  --text-dim: #999999;
+  --text-inverse: #ffffff;
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Accents - Keep semantic but muted or rely on symbols */
+  /* Turning them into shades or patterns might be too abstract, let's keep colors but consistent with 'monochrome' vibe? 
+     Actually user specifically asked for "background white, black, light gray, dark gray". 
+     I should probably avoid colorful success/warning buttons if possible, or keep them minimal.
+     For now, I'll keep them but maybe darken them to fit the stark theme.
+  */
+  --success: #333333;
+  /* Using dark gray for positive action to fit monochrome, or maybe keep green? Let's try strict monochrome first as requested. */
+  /* Wait, "Expression using White, Black, Light Gray, Dark Gray". 
+     I will try to stick to these. 
+     Success -> Black
+     Warning -> Dark Gray
+     Danger -> Reserving a specific gray or keeping it black with underlining?
+     Actually, "Yes/Maybe/No" needs distinction. 
+     I'll use: Yes=Black, Maybe=Gray, No=Light Gray (or strike-through).
+     Let's define semantic variables mapping to the palette.
+  */
+  --success-color: #000000;
+  --warning-color: #666666;
+  --danger-color: #999999;
+
+  /* Re-mapping standard variables to these if needed, but I'll stick to semantic usage in code */
+  --success: var(--success-color);
+  --warning: var(--warning-color);
+  --danger: var(--danger-color);
+
+  /* Spacing & Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  --glass-border: 1px solid rgba(0, 0, 0, 0.1);
+  --glass-bg: rgba(0, 0, 0, 0.02);
+  --glass-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 * {
@@ -30,13 +67,107 @@ body {
   margin: 0;
 }
 
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+}
+
 a {
   color: inherit;
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+/* Utilities */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-shadow);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  font-family: 'Outfit', sans-serif;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  font-size: 0.95rem;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary {
+  background: white;
+  color: var(--text-main);
+  border: 1px solid #e0e0e0;
+}
+
+.btn-secondary:hover {
+  background: #f5f5f5;
+}
+
+input,
+textarea {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: var(--radius-md);
+  padding: 0.8rem 1rem;
+  color: var(--text-main);
+  font-family: inherit;
+  width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+}
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
 }

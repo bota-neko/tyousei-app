@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model Event {
+  id                    String        @id @default(uuid())
+  title                 String
+  description           String?
+  organizerId           String
+  capacityDefault       Int           @default(0)
+  visibility            String        @default("public")
+  passcode              String?
+  participationMode     String        @default("normal")
+  cancelDeadlineMinutes Int           @default(1440)
+  receptionType         String        @default("qr")
+  paymentEnabled        Boolean       @default(false)
+  status                String        @default("draft")
+  location              String?
+  address               String?
+  siteUrl               String?
+  fee                   String?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+  slots                 EventSlot[]
+  participants          Participant[]
+}
+
+model EventSlot {
+  id                 String        @id @default(uuid())
+  eventId            String
+  start              DateTime
+  end                DateTime
+  capacityOverride   Int?
+  memo               String?
+  status             String        @default("candidate")
+  event              Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  confirmedAttendees Participant[] @relation("ConfirmedSlot")
+  votes              Vote[]
+}
+
+model Participant {
+  id              String     @id @default(uuid())
+  eventId         String
+  nickname        String
+  token           String     @unique
+  contactInfo     String?
+  memo            String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  confirmedSlotId String?
+  status          String     @default("polled")
+  isPaid          Boolean    @default(false)
+  checkInCode     String?
+  checkedInAt     DateTime?
+  confirmedSlot   EventSlot? @relation("ConfirmedSlot", fields: [confirmedSlotId], references: [id])
+  event           Event      @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  votes           Vote[]
+}
+
+model Vote {
+  id            String      @id @default(uuid())
+  participantId String
+  slotId        String
+  response      String
+  comment       String?
+  updatedAt     DateTime    @updatedAt
+  slot          EventSlot   @relation(fields: [slotId], references: [id], onDelete: Cascade)
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+
+  @@unique([participantId, slotId])
+}
