@@ -78,8 +78,17 @@ export default function ParticipantList({ slots, participants, currentParticipan
                         <th style={{ padding: '1rem', textAlign: 'left', borderBottom: '1px solid #ddd' }}>参加者</th>
                         {slots.map(slot => (
                             <th key={slot.id} style={{ padding: '0.5rem', textAlign: 'center', borderBottom: '1px solid #ddd', minWidth: '80px' }}>
-                                <div style={{ fontSize: '0.8rem' }}>{formatDate(slot.start)}</div>
-                                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{formatTime(slot.start)}</div>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1.2 }}>
+                                    <span style={{ fontSize: '0.85rem', fontWeight: 'bold' }}>
+                                        {new Date(slot.start).getMonth() + 1}/{new Date(slot.start).getDate()}
+                                    </span>
+                                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                                        ({new Date(slot.start).toLocaleDateString('ja-JP', { weekday: 'short' })})
+                                    </span>
+                                    <span style={{ fontSize: '0.75rem', marginTop: '0.1rem' }}>
+                                        {formatTime(slot.start)}
+                                    </span>
+                                </div>
                             </th>
                         ))}
                         <th style={{ padding: '1rem', textAlign: 'left', borderBottom: '1px solid #ddd' }}>コメント</th>

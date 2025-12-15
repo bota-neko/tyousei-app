@@ -189,8 +189,17 @@ export default async function Dashboard({
                                             <th style={{ padding: '0.5rem', fontSize: '0.9rem', color: 'var(--text-muted)', position: 'sticky', left: 0, background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(4px)', zIndex: 1 }}>名前</th>
                                             {event.slots.map(slot => (
                                                 <th key={slot.id} style={{ padding: '0.5rem', fontSize: '0.85rem', color: 'var(--text-muted)', textAlign: 'center', minWidth: '60px' }}>
-                                                    {formatDate(slot.start).split('(')[0]}<br />
-                                                    <span style={{ fontSize: '0.75rem' }}>{formatTime(slot.start)}</span>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1.2 }}>
+                                                        <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--text-main)' }}>
+                                                            {new Date(slot.start).getMonth() + 1}/{new Date(slot.start).getDate()}
+                                                        </span>
+                                                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                                                            ({new Date(slot.start).toLocaleDateString('ja-JP', { weekday: 'short' })})
+                                                        </span>
+                                                        <span style={{ fontSize: '0.75rem', marginTop: '0.1rem' }}>
+                                                            {formatTime(slot.start)}
+                                                        </span>
+                                                    </div>
                                                 </th>
                                             ))}
                                             <th style={{ padding: '0.5rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>コメント</th>
