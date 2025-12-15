@@ -282,7 +282,7 @@ export default async function Dashboard({
                         <h3 style={{ marginBottom: '1rem', fontSize: '1rem', fontWeight: '600', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                             <span>🔗</span> 共有
                         </h3>
-                        <CopyLinkButton url={`${process.env.NEXT_PUBLIC_BASE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')}/events/${event.id}`} />
+                        <CopyLinkButton path={`/events/${event.id}`} />
                     </div>
 
                     <div style={{ textAlign: 'center', marginTop: '1rem' }}>
