@@ -34,6 +34,30 @@ export default async function Dashboard({
     return (
         <div className="container" style={{ paddingTop: '2rem', paddingBottom: '4rem' }}>
             <UpdateToast />
+
+            <div role="alert" style={{
+                marginBottom: '2rem',
+                padding: '1rem',
+                borderRadius: 'var(--radius-md)',
+                background: '#fff4e5',
+                border: '1px solid #ffd591',
+                color: '#663c00',
+                display: 'flex',
+                alignItems: 'start',
+                gap: '0.75rem',
+                fontSize: '0.9rem',
+                lineHeight: 1.5
+            }}>
+                <span style={{ fontSize: '1.2rem' }}>⚠️</span>
+                <div>
+                    <strong>【重要】このページのURLを必ず保存してください</strong>
+                    <p style={{ marginTop: '0.25rem' }}>
+                        この管理画面のURL（現在のアドレスバーのURL）を忘れると、イベントの編集や確認ができなくなります。
+                        <br />
+                        <strong>URLの再発行はできません</strong>ので、今すぐブックマークをお願いします。
+                    </p>
+                </div>
+            </div>
             <header style={{ marginBottom: '3rem', textAlign: 'center' }}>
                 <p className="status-badge" style={{
                     display: 'inline-block',
