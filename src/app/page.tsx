@@ -2,9 +2,9 @@ import { createEvent } from '@/lib/actions'
 
 export default function Home() {
   return (
-    <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+    <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem 0rem' }}>
       <div className="container" style={{ textAlign: 'center' }}>
-        <section style={{ textAlign: 'center', padding: '4rem 1.5rem', maxWidth: '800px', margin: '0 auto' }}>
+        <section style={{ textAlign: 'center', padding: '0rem 1.5rem 4rem', maxWidth: '800px', margin: '0 auto' }}>
           <h1 style={{
             fontSize: 'clamp(2.5rem, 5vw, 4rem)',
             fontWeight: '700',
