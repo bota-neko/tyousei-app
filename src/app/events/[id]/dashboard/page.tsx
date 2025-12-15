@@ -180,15 +180,38 @@ export default async function Dashboard({
                     </section>
                 </div>
 
-                {/* Sidebar (Right Column) - Admin Controls */}
                 <aside style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
 
-                    {/* STEP 1: Event Settings */}
+                    {/* STEP 1: Add Dates */}
+                    {isDraft && (
+                        <div className="glass-panel" style={{ padding: '1.5rem', borderLeft: '4px solid var(--primary)' }}>
+                            <h3 style={{ marginBottom: '1rem', fontSize: '1rem', fontWeight: '600', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <span style={{ background: 'var(--primary)', color: 'white', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem' }}>1</span>
+                                日程候補の追加
+                            </h3>
+                            <form action={addEventSlot.bind(null, event.id)} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                <div>
+                                    <label style={{ fontSize: '0.8rem' }}>開始</label>
+                                    <input type="datetime-local" name="start" required style={{ width: '100%', padding: '0.6rem', fontSize: '0.85rem' }} />
+                                </div>
+                                <div>
+                                    <label style={{ fontSize: '0.8rem' }}>終了</label>
+                                    <input type="datetime-local" name="end" required style={{ width: '100%', padding: '0.6rem', fontSize: '0.85rem' }} />
+                                </div>
+                                <button type="submit" className="btn btn-secondary" style={{ marginTop: '0.5rem', background: 'var(--primary)', color: 'white', border: 'none' }}>追加する</button>
+                            </form>
+                        </div>
+                    )}
+
+                    {/* STEP 2: Event Settings */}
                     <div className="glass-panel" style={{ padding: '1.5rem', borderLeft: '4px solid var(--primary)' }}>
                         <h3 style={{ marginBottom: '1rem', fontSize: '1rem', fontWeight: '600', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <span style={{ background: 'var(--primary)', color: 'white', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem' }}>1</span>
+                            <span style={{ background: 'var(--primary)', color: 'white', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem' }}>2</span>
                             基本設定
                         </h3>
+                        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '1rem', lineHeight: '1.4' }}>
+                            基本設定は、後からでも追加して、同じURLで案内可能です。
+                        </p>
                         <form action={updateEventStatus.bind(null, event.id, event.status)}>
                             <div style={{ marginBottom: '1rem' }}>
                                 <label style={{ fontSize: '0.8rem' }}>店舗名 (場所)</label>
@@ -209,27 +232,6 @@ export default async function Dashboard({
                             <button type="submit" className="btn btn-secondary" style={{ width: '100%', fontSize: '0.9rem' }}>更新を保存</button>
                         </form>
                     </div>
-
-                    {/* STEP 2: Add Dates */}
-                    {isDraft && (
-                        <div className="glass-panel" style={{ padding: '1.5rem', borderLeft: '4px solid var(--primary)' }}>
-                            <h3 style={{ marginBottom: '1rem', fontSize: '1rem', fontWeight: '600', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <span style={{ background: 'var(--primary)', color: 'white', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem' }}>2</span>
-                                日程候補の追加
-                            </h3>
-                            <form action={addEventSlot.bind(null, event.id)} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                                <div>
-                                    <label style={{ fontSize: '0.8rem' }}>開始</label>
-                                    <input type="datetime-local" name="start" required style={{ width: '100%', padding: '0.6rem', fontSize: '0.85rem' }} />
-                                </div>
-                                <div>
-                                    <label style={{ fontSize: '0.8rem' }}>終了</label>
-                                    <input type="datetime-local" name="end" required style={{ width: '100%', padding: '0.6rem', fontSize: '0.85rem' }} />
-                                </div>
-                                <button type="submit" className="btn btn-secondary" style={{ marginTop: '0.5rem', background: 'var(--primary)', color: 'white', border: 'none' }}>追加する</button>
-                            </form>
-                        </div>
-                    )}
 
                     {/* STEP 3: Actions */}
                     <div className="glass-panel" style={{ padding: '1.5rem', borderLeft: '4px solid var(--primary)' }}>

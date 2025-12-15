@@ -5,13 +5,25 @@ export default function Home() {
     <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
       <div className="container" style={{ textAlign: 'center' }}>
         <div style={{ marginBottom: '4rem' }}>
-          <h1 style={{ fontSize: '3.5rem', marginBottom: '1rem', background: 'linear-gradient(to right, #000, #666)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            スマートな<br />イベント調整を。
+          <h1 style={{
+            fontSize: 'clamp(2rem, 8vw, 3.5rem)',
+            marginBottom: '1rem',
+            background: 'linear-gradient(to right, #000, #666)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            lineHeight: 1.2
+          }}>
+            スマートな<br className="mobile-hide" />イベント調整を。
           </h1>
-          <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto' }}>
-            日程調整から当日の受付まで、これひとつで完了。<br />
+          <p style={{ color: 'var(--text-muted)', fontSize: 'clamp(1rem, 4vw, 1.2rem)', maxWidth: '600px', margin: '0 auto', lineHeight: 1.6 }}>
+            日程調整から当日の受付まで、これひとつで完了。<br className="mobile-hide" />
             参加者のログインやアプリインストールは不要です。
           </p>
+          <style>{`
+            @media (max-width: 600px) {
+              .mobile-hide { display: none; }
+            }
+          `}</style>
         </div>
 
         <div className="glass-panel" style={{ padding: '2.5rem', maxWidth: '500px', margin: '0 auto', textAlign: 'left' }}>
