@@ -97,26 +97,50 @@ export default async function EventPage({
                                         })()}
                                     </div>
                                 </div>
-                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', marginTop: '1rem', color: 'var(--text-main)' }}>
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                            <span>📍</span>
-                                            <span style={{ fontWeight: '600', fontSize: '1.1rem' }}>{event.location || '場所未定'}</span>
-                                        </div>
-                                        {event.address && <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', paddingLeft: '1.5rem' }}>{event.address}</div>}
-                                        {event.siteUrl && (
-                                            <div style={{ paddingLeft: '1.5rem' }}>
-                                                <a href={event.siteUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.9rem', color: 'var(--primary)', textDecoration: 'underline' }}>
-                                                    店舗情報・アクセス ↗
-                                                </a>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', marginTop: '1rem', color: 'var(--text-main)', justifyContent: 'space-between', alignItems: 'start' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', flex: '1 1 300px' }}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                <span>📍</span>
+                                                <span style={{ fontWeight: '600', fontSize: '1.1rem' }}>{event.location || '場所未定'}</span>
                                             </div>
-                                        )}
+                                            {event.address && <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', paddingLeft: '1.5rem' }}>{event.address}</div>}
+                                            {event.siteUrl && (
+                                                <div style={{ paddingLeft: '1.5rem' }}>
+                                                    <a href={event.siteUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.9rem', color: 'var(--primary)', textDecoration: 'underline' }}>
+                                                        店舗情報・アクセス ↗
+                                                    </a>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', alignSelf: 'flex-start' }}>
+                                            <span>💰</span>
+                                            <span style={{ fontWeight: '600' }}>{event.fee || '会費未定'}</span>
+                                        </div>
                                     </div>
 
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', alignSelf: 'flex-start' }}>
-                                        <span>💰</span>
-                                        <span style={{ fontWeight: '600' }}>{event.fee || '会費未定'}</span>
-                                    </div>
+                                    {(event.address || event.location) && (
+                                        <div style={{ flex: '0 0 300px', maxWidth: '100%', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                            <iframe
+                                                width="100%"
+                                                height="200"
+                                                style={{ border: 0, borderRadius: 'var(--radius-sm)' }}
+                                                loading="lazy"
+                                                allowFullScreen
+                                                src={`https://maps.google.com/maps?q=${encodeURIComponent(event.address || event.location || '')}&output=embed&t=m&z=15`}>
+                                            </iframe>
+                                            <a
+                                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.address || event.location || '')}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="btn btn-secondary"
+                                                style={{ fontSize: '0.85rem', padding: '0.5rem', textAlign: 'center' }}
+                                            >
+                                                ピンの場所を地図アプリで開く 🗺️
+                                            </a>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
