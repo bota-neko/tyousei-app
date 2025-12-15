@@ -10,7 +10,9 @@ export default function Home() {
             fontWeight: '700',
             lineHeight: '1.2',
             marginBottom: '2rem',
-            fontFamily: "'Zen Maru Gothic', sans-serif"
+            fontFamily: "'Zen Maru Gothic', sans-serif",
+            fontFeatureSettings: '"palt"',
+            letterSpacing: '0.05em'
           }}>
             スマート<span style={{ fontSize: '0.85em' }}>な</span><br className="sm:hidden" />
             イベント調整<span style={{ fontSize: '0.85em' }}>を</span>。
