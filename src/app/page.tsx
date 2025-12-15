@@ -4,27 +4,22 @@ export default function Home() {
   return (
     <main style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
       <div className="container" style={{ textAlign: 'center' }}>
-        <div style={{ marginBottom: '4rem' }}>
+        <section style={{ textAlign: 'center', padding: '6rem 1.5rem', maxWidth: '800px', margin: '0 auto' }}>
           <h1 style={{
-            fontSize: 'clamp(2rem, 8vw, 3.5rem)',
-            marginBottom: '1rem',
-            background: 'linear-gradient(to right, #000, #666)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            lineHeight: 1.2
+            fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+            fontWeight: '700',
+            lineHeight: '1.2',
+            marginBottom: '2rem',
+            fontFamily: "'Zen Maru Gothic', sans-serif"
           }}>
-            スマートな<br className="mobile-hide" />イベント調整を。
+            スマート<span style={{ fontSize: '0.85em' }}>な</span><br className="sm:hidden" />
+            イベント調整<span style={{ fontSize: '0.85em' }}>を</span>。
           </h1>
-          <p style={{ color: 'var(--text-muted)', fontSize: 'clamp(1rem, 4vw, 1.2rem)', maxWidth: '600px', margin: '0 auto', lineHeight: 1.6 }}>
-            日程調整から当日の受付まで、これひとつで完了。<br className="mobile-hide" />
+          <p style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--text-main)', marginBottom: '3rem', maxWidth: '600px', margin: '0 auto 3rem' }}>
+            日程調整から当日の受付まで、これひとつで完了。<br />
             参加者のログインやアプリインストールは不要です。
           </p>
-          <style>{`
-            @media (max-width: 600px) {
-              .mobile-hide { display: none; }
-            }
-          `}</style>
-        </div>
+        </section>
 
         <div className="glass-panel" style={{ padding: '2.5rem', maxWidth: '500px', margin: '0 auto', textAlign: 'left' }}>
           <h2 style={{ marginBottom: '1.5rem', fontSize: '1.5rem' }}>イベントを作成</h2>
