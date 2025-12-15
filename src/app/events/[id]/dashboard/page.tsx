@@ -96,7 +96,7 @@ export default async function Dashboard({
                     {/* Fee */}
                     <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <span style={{ color: 'var(--text-muted)' }}>💰</span>
-                        {event.fee ? <strong>{event.fee}</strong> : <span style={{ color: 'var(--text-muted)' }}>会費未定</span>}
+                        {event.fee ? <strong>{event.fee.match(/^\d+$/) ? (Number(event.fee).toLocaleString() + '円') : event.fee}</strong> : <span style={{ color: 'var(--text-muted)' }}>会費未定</span>}
                     </div>
                 </div>
             </header>

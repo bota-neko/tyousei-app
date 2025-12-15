@@ -116,7 +116,7 @@ export default async function EventPage({
 
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', alignSelf: 'flex-start' }}>
                                             <span>💰</span>
-                                            <span style={{ fontWeight: '600' }}>{event.fee || '会費未定'}</span>
+                                            <span style={{ fontWeight: '600' }}>{event.fee ? (event.fee.match(/^\d+$/) ? (Number(event.fee).toLocaleString() + '円') : event.fee) : '会費未定'}</span>
                                         </div>
                                     </div>
 
@@ -248,7 +248,7 @@ export default async function EventPage({
 
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', alignSelf: 'flex-start' }}>
                                             <span>💰</span>
-                                            <span style={{ fontWeight: '600' }}>{event.fee || '会費未定'}</span>
+                                            <span style={{ fontWeight: '600' }}>{event.fee ? (event.fee.match(/^\d+$/) ? (Number(event.fee).toLocaleString() + '円') : event.fee) : '会費未定'}</span>
                                         </div>
                                     </div>
                                 </div>
