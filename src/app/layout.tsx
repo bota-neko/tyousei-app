@@ -13,7 +13,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body>{children}</body>
+      <body>
+        <div style={{ textAlign: 'center', padding: '2rem 0 1rem' }}>
+          <img src="/logo.png" alt="Logo" style={{ height: '60px', width: 'auto' }} />
+        </div>
+        {children}
+      </body>
     </html>
   )
 }

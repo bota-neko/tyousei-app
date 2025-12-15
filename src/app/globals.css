@@ -1,64 +1,44 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap');
 
 :root {
-  /* Monochrome HSL Palette */
-  /* Primary: Pure Black */
-  --primary-hue: 0;
-  --primary-sat: 0%;
-  --primary-light: 0%;
-  --primary: hsl(0, 0%, 10%);
-  /* Soft Black */
-  --primary-dark: hsl(0, 0%, 0%);
-  /* Pure Black */
-  --primary-glow: hsl(0, 0%, 80%);
+  /* Pop Palette */
+  /* Primary: Vibrant Orange */
+  --primary: #F97316;
+  --primary-dark: #EA580C;
+  --primary-glow: #FDBA74;
 
-  /* Backgrounds: White / Light Gray */
-  --bg-hue: 0;
-  --bg-dark: #ffffff;
-  --bg-card: #f9f9f9;
-  --bg-card-hover: #f0f0f0;
+  /* Backgrounds */
+  --bg-dark: #FFF7ED;
+  /* Light Orange Tint */
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #FFF1E7;
 
   /* Text */
-  --text-main: #111111;
-  --text-muted: #666666;
-  --text-dim: #999999;
-  --text-inverse: #ffffff;
+  --text-main: #431407;
+  /* Dark Brown/Black for warmth */
+  --text-muted: #9A3412;
+  /* Muted Orange/Brown */
+  --text-dim: #C2410C;
+  --text-inverse: #FFFFFF;
 
-  /* Accents - Keep semantic but muted or rely on symbols */
-  /* Turning them into shades or patterns might be too abstract, let's keep colors but consistent with 'monochrome' vibe? 
-     Actually user specifically asked for "background white, black, light gray, dark gray". 
-     I should probably avoid colorful success/warning buttons if possible, or keep them minimal.
-     For now, I'll keep them but maybe darken them to fit the stark theme.
-  */
-  --success: #333333;
-  /* Using dark gray for positive action to fit monochrome, or maybe keep green? Let's try strict monochrome first as requested. */
-  /* Wait, "Expression using White, Black, Light Gray, Dark Gray". 
-     I will try to stick to these. 
-     Success -> Black
-     Warning -> Dark Gray
-     Danger -> Reserving a specific gray or keeping it black with underlining?
-     Actually, "Yes/Maybe/No" needs distinction. 
-     I'll use: Yes=Black, Maybe=Gray, No=Light Gray (or strike-through).
-     Let's define semantic variables mapping to the palette.
-  */
-  --success-color: #000000;
-  --warning-color: #666666;
-  --danger-color: #999999;
+  /* Semantics */
+  --success: #10B981;
+  /* Emerald */
+  --warning: #F59E0B;
+  /* Amber */
+  --danger: #EF4444;
+  /* Red */
 
-  /* Re-mapping standard variables to these if needed, but I'll stick to semantic usage in code */
-  --success: var(--success-color);
-  --warning: var(--warning-color);
-  --danger: var(--danger-color);
-
-  /* Spacing & Radius */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 16px;
+  /* Spacing & Radius - Rounder for Pop feel */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
   --radius-full: 9999px;
 
-  --glass-border: 1px solid rgba(0, 0, 0, 0.1);
-  --glass-bg: rgba(0, 0, 0, 0.02);
-  --glass-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  /* Glass / Card Styles */
+  --glass-border: 2px solid rgba(255, 255, 255, 1);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-shadow: 0 8px 32px rgba(249, 115, 22, 0.08);
 }
 
 * {
@@ -68,8 +48,11 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Outfit', 'Inter', sans-serif;
+  /* Outfit first for headers & body for pop feel */
   background-color: var(--bg-dark);
+  background-image: radial-gradient(var(--primary-glow) 2px, transparent 2px);
+  background-size: 32px 32px;
   color: var(--text-main);
   line-height: 1.6;
   min-height: 100vh;
