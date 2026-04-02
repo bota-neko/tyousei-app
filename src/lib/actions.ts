@@ -42,8 +42,9 @@ export async function addEventSlot(eventId: string, formData: FormData) {
     // Simple validation
     if (!startStr || !endStr) return
 
-    const start = new Date(startStr)
-    const end = new Date(endStr)
+    // Ensure it's treated as JST by appending +09:00 if not present
+    const start = new Date(startStr.includes('Z') || startStr.includes('+') ? startStr : `${startStr}+09:00`)
+    const end = new Date(endStr.includes('Z') || endStr.includes('+') ? endStr : `${endStr}+09:00`)
 
     if (isNaN(start.getTime()) || isNaN(end.getTime())) {
         // Invalid date format
@@ -69,6 +70,34 @@ export async function deleteEventSlot(slotId: string, eventId: string) {
     revalidatePath(`/events/${eventId}/dashboard`)
 }
 
+export async function toggleShowParticipants(eventId: string, formData: FormData) {
+    const showParticipants = formData.has('showParticipants')
+    await prisma.event.update({
+        where: { id: eventId },
+        data: { showParticipants }
+    })
+    revalidatePath(`/events/${eventId}/dashboard`)
+    revalidatePath(`/events/${eventId}`)
+    redirect(`/events/${eventId}/dashboard?updated=true`)
+}
+
+export async function deleteEvent(eventId: string) {
+    await prisma.event.delete({
+        where: { id: eventId }
+    })
+    redirect('/?deleted=true')
+}
+
+export async function closeEvent(eventId: string) {
+    await prisma.event.update({
+        where: { id: eventId },
+        data: { status: 'closed' }
+    })
+    revalidatePath(`/events/${eventId}/dashboard`)
+    revalidatePath(`/events/${eventId}`)
+    redirect(`/events/${eventId}/dashboard?updated=true`)
+}
+
 export async function updateEventStatus(eventId: string, status: string, formData?: FormData) {
     const data: any = { status }
     if (formData) {
@@ -81,6 +110,9 @@ export async function updateEventStatus(eventId: string, status: string, formDat
         if (address !== null) data.address = address
         if (siteUrl !== null) data.siteUrl = siteUrl
         if (fee !== null) data.fee = fee
+
+        // チェックボックスは未チェック時に値を送信しないため、has で判定
+        data.showParticipants = formData.has('showParticipants')
     }
 
     await prisma.event.update({

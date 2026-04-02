@@ -15,6 +15,7 @@ export function generateToken(): string {
 export function formatDate(date: Date | string): string {
     const d = new Date(date);
     return d.toLocaleDateString('ja-JP', {
+        timeZone: 'Asia/Tokyo',
         month: 'short',
         day: 'numeric',
         weekday: 'short',
@@ -24,6 +25,7 @@ export function formatDate(date: Date | string): string {
 export function formatTime(date: Date | string): string {
     const d = new Date(date);
     return d.toLocaleTimeString('ja-JP', {
+        timeZone: 'Asia/Tokyo',
         hour: '2-digit',
         minute: '2-digit',
     });

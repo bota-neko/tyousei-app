@@ -1,9 +1,11 @@
 import { prisma } from '@/lib/db'
-import { addEventSlot, deleteEventSlot, updateEventStatus, confirmEvent, togglePaymentStatus } from '@/lib/actions'
+import { addEventSlot, deleteEventSlot, updateEventStatus, confirmEvent, togglePaymentStatus, toggleShowParticipants, closeEvent } from '@/lib/actions'
 import { notFound } from 'next/navigation'
 import { formatDate, formatTime, checkClassName } from '@/lib/utils'
 import CopyLinkButton from './CopyLinkButton'
 import UpdateToast from './UpdateToast'
+import SaveEventToStorage from './SaveEventToStorage'
+import DeleteEventButton from './DeleteEventButton'
 
 export default async function Dashboard({
     params
@@ -30,10 +32,12 @@ export default async function Dashboard({
     const isDraft = event.status === 'draft'
     const isPolling = event.status === 'polling'
     const isFinalized = event.status === 'finalized'
+    const isClosed = event.status === 'closed'
 
     return (
         <div className="container" style={{ paddingTop: '2rem', paddingBottom: '4rem' }}>
             <UpdateToast />
+            <SaveEventToStorage eventId={event.id} title={event.title} status={event.status} />
 
             <div role="alert" style={{
                 marginBottom: '2rem',
@@ -63,7 +67,7 @@ export default async function Dashboard({
                     display: 'inline-block',
                     padding: '0.25rem 0.75rem',
                     borderRadius: '99px',
-                    background: isDraft ? 'var(--warning)' : (isFinalized ? 'var(--primary)' : 'var(--success)'),
+                    background: isDraft ? 'var(--warning)' : (isFinalized ? 'var(--primary)' : (isClosed ? 'var(--text-muted)' : 'var(--success)')),
                     color: 'white',
                     fontSize: '0.85rem',
                     fontWeight: 'bold',
@@ -71,7 +75,8 @@ export default async function Dashboard({
                 }}>
                     {event.status === 'draft' ? '作成中' :
                         event.status === 'polling' ? '募集中' :
-                            event.status === 'finalized' ? '決定済み' : event.status}
+                            event.status === 'finalized' ? '決定済み' :
+                                event.status === 'closed' ? '終了' : event.status}
                 </p>
                 <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>{event.title}</h1>
                 {event.description && <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto 1.5rem' }}>{event.description}</p>}
@@ -261,6 +266,27 @@ export default async function Dashboard({
                         </div>
                     )}
 
+                    {/* Participant Visibility Toggle */}
+                    <div className="glass-panel" style={{ padding: '1.5rem', borderLeft: '4px solid var(--primary)' }}>
+                        <form action={toggleShowParticipants.bind(null, event.id)}>
+                            <div style={{ padding: '0.5rem', background: 'rgba(0,0,0,0.02)', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(0,0,0,0.06)' }}>
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '500' }}>
+                                    <input
+                                        type="checkbox"
+                                        name="showParticipants"
+                                        defaultChecked={event.showParticipants}
+                                        style={{ width: '18px', height: '18px', accentColor: 'var(--primary)', cursor: 'pointer' }}
+                                    />
+                                    参加者に他の回答者を表示する
+                                </label>
+                                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.5rem', marginLeft: '2.25rem', lineHeight: '1.4' }}>
+                                    OFFにすると、参加者のページで他の人の名前や回答が非表示になります。
+                                </p>
+                            </div>
+                            <button type="submit" className="btn btn-secondary" style={{ width: '100%', fontSize: '0.85rem', marginTop: '0.75rem' }}>保存</button>
+                        </form>
+                    </div>
+
                     {/* STEP 2: Event Settings */}
                     <div className="glass-panel" style={{ padding: '1.5rem', borderLeft: '4px solid var(--primary)' }}>
                         <h3 style={{ marginBottom: '1rem', fontSize: '1rem', fontWeight: '600', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -287,6 +313,7 @@ export default async function Dashboard({
                                 <label style={{ fontSize: '0.8rem' }}>会費</label>
                                 <input type="text" name="fee" defaultValue={event.fee || ''} placeholder="例: 3000円" style={{ padding: '0.6rem' }} />
                             </div>
+
                             <button type="submit" className="btn btn-secondary" style={{ width: '100%', fontSize: '0.9rem' }}>更新を保存</button>
                         </form>
                     </div>
@@ -330,6 +357,17 @@ export default async function Dashboard({
                                     <a href={`/events/${event.id}/reception`} className="btn btn-secondary" style={{ width: '100%', borderColor: 'var(--success)', color: 'var(--success)' }}>
                                         受付管理ページ
                                     </a>
+                                    <form action={closeEvent.bind(null, event.id)}>
+                                        <button type="submit" className="btn btn-secondary" style={{ width: '100%', borderColor: 'var(--warning)', color: 'var(--warning)' }}>
+                                            イベントを終了する
+                                        </button>
+                                    </form>
+                                </div>
+                            )}
+
+                            {isClosed && (
+                                <div style={{ textAlign: 'center' }}>
+                                    <p style={{ fontSize: '1rem', fontWeight: 'bold', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>このイベントは終了しました</p>
                                 </div>
                             )}
                         </div>
@@ -341,6 +379,12 @@ export default async function Dashboard({
                             <span>🔗</span> 共有
                         </h3>
                         <CopyLinkButton path={`/events/${event.id}`} />
+                    </div>
+
+                    {/* Danger Zone */}
+                    <div style={{ padding: '1.5rem', border: '1px solid rgba(229, 62, 62, 0.2)', borderRadius: 'var(--radius-md)', background: 'rgba(229, 62, 62, 0.02)' }}>
+                        <h3 style={{ marginBottom: '0.75rem', fontSize: '0.85rem', fontWeight: '600', color: 'var(--danger, #e53e3e)' }}>⚠️ 危険な操作</h3>
+                        <DeleteEventButton eventId={event.id} />
                     </div>
 
                     <div style={{ textAlign: 'center', marginTop: '1rem' }}>

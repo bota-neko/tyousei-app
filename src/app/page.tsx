@@ -1,4 +1,5 @@
 import { createEvent } from '@/lib/actions'
+import MyEventList from './MyEventList'
 
 export default function Home() {
   return (
@@ -62,6 +63,8 @@ export default function Home() {
           <span>•</span>
           <span>QR受付機能</span>
         </div>
+
+        <MyEventList />
       </div>
     </main>
   )

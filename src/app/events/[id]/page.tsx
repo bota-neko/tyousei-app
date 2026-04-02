@@ -57,7 +57,35 @@ export default async function EventPage({
         return (
             <div className="container" style={{ paddingTop: '3rem', paddingBottom: '5rem' }}>
                 <h1 style={{ marginBottom: '1rem' }}>{event.title}</h1>
-                {event.description && <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>{event.description}</p>}
+                {event.description && <p style={{ color: 'var(--text-muted)', marginBottom: '1rem' }}>{event.description}</p>}
+
+                {/* Event Info */}
+                {(event.location || event.address || event.fee) && (
+                    <div style={{ marginBottom: '2rem', padding: '1.25rem', background: 'rgba(0,0,0,0.02)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(0,0,0,0.06)' }}>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', fontSize: '0.9rem' }}>
+                            {(event.location || event.address) && (
+                                <div style={{ display: 'flex', alignItems: 'start', gap: '0.4rem' }}>
+                                    <span>📍</span>
+                                    <div>
+                                        {event.location && <span style={{ fontWeight: '600' }}>{event.location}</span>}
+                                        {event.address && <span style={{ color: 'var(--text-muted)', marginLeft: event.location ? '0.5rem' : 0 }}>{event.address}</span>}
+                                        {event.siteUrl && (
+                                            <a href={event.siteUrl} target="_blank" rel="noopener noreferrer" style={{ marginLeft: '0.5rem', color: 'var(--primary)', fontSize: '0.85rem', textDecoration: 'underline' }}>
+                                                詳細 ↗
+                                            </a>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                            {event.fee && (
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                    <span>💰</span>
+                                    <span style={{ fontWeight: '600' }}>{event.fee.match(/^\d+$/) ? (Number(event.fee).toLocaleString() + '円') : event.fee}</span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
 
                 {isPolling ? (
                     <>
@@ -72,12 +100,14 @@ export default async function EventPage({
                             </form>
                         </div>
 
-                        <div style={{ marginTop: '3rem' }}>
-                            <ParticipantList
-                                slots={event.slots}
-                                participants={event.participants}
-                            />
-                        </div>
+                        {event.showParticipants && (
+                            <div style={{ marginTop: '3rem' }}>
+                                <ParticipantList
+                                    slots={event.slots}
+                                    participants={event.participants}
+                                />
+                            </div>
+                        )}
                     </>
                 ) : (event.status === 'finalized' || event.status === 'live') ? (
                     <div className="glass-panel" style={{ padding: '2rem', textAlign: 'center' }}>
@@ -149,11 +179,13 @@ export default async function EventPage({
                             すでに登録済みの方は、専用リンクからアクセスして詳細・ステータスをご確認ください。
                         </p>
 
-                        <ParticipantList
-                            slots={event.slots}
-                            participants={event.participants}
-                            confirmedSlotId={event.slots.find(s => s.status === 'confirmed')?.id}
-                        />
+                        {event.showParticipants && (
+                            <ParticipantList
+                                slots={event.slots}
+                                participants={event.participants}
+                                confirmedSlotId={event.slots.find(s => s.status === 'confirmed')?.id}
+                            />
+                        )}
 
                         <div style={{ marginTop: '3rem', borderTop: '1px solid #eee', paddingTop: '2rem', textAlign: 'left' }}>
                             <h3 style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>追加で参加を表明する</h3>
@@ -193,6 +225,35 @@ export default async function EventPage({
                 </div>
             </header>
 
+            {/* Event Info */}
+            {(event.description || event.location || event.address || event.fee) && (
+                <div style={{ marginBottom: '2rem', padding: '1.25rem', background: 'rgba(0,0,0,0.02)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(0,0,0,0.06)' }}>
+                    {event.description && <p style={{ color: 'var(--text-muted)', marginBottom: '0.75rem' }}>{event.description}</p>}
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', fontSize: '0.9rem' }}>
+                        {(event.location || event.address) && (
+                            <div style={{ display: 'flex', alignItems: 'start', gap: '0.4rem' }}>
+                                <span>📍</span>
+                                <div>
+                                    {event.location && <span style={{ fontWeight: '600' }}>{event.location}</span>}
+                                    {event.address && <span style={{ color: 'var(--text-muted)', marginLeft: event.location ? '0.5rem' : 0 }}>{event.address}</span>}
+                                    {event.siteUrl && (
+                                        <a href={event.siteUrl} target="_blank" rel="noopener noreferrer" style={{ marginLeft: '0.5rem', color: 'var(--primary)', fontSize: '0.85rem', textDecoration: 'underline' }}>
+                                            詳細 ↗
+                                        </a>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                        {event.fee && (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                <span>💰</span>
+                                <span style={{ fontWeight: '600' }}>{event.fee.match(/^\d+$/) ? (Number(event.fee).toLocaleString() + '円') : event.fee}</span>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+
             {isPolling ? (
                 <>
                     <VoteForm
@@ -202,11 +263,13 @@ export default async function EventPage({
                         initialVotes={myVotes}
                         initialMemo={participant.memo}
                     />
-                    <ParticipantList
-                        slots={event.slots}
-                        participants={event.participants}
-                        currentParticipantId={participant.id}
-                    />
+                    {event.showParticipants && (
+                        <ParticipantList
+                            slots={event.slots}
+                            participants={event.participants}
+                            currentParticipantId={participant.id}
+                        />
+                    )}
                 </>
             ) : (
                 <div className="glass-panel" style={{ padding: '2rem', textAlign: 'center' }}>
@@ -254,12 +317,14 @@ export default async function EventPage({
                                 </div>
                             </div>
 
-                            <ParticipantList
-                                slots={event.slots}
-                                participants={event.participants}
-                                currentParticipantId={participant.id}
-                                confirmedSlotId={event.slots.find(s => s.status === 'confirmed')?.id}
-                            />
+                            {event.showParticipants && (
+                                <ParticipantList
+                                    slots={event.slots}
+                                    participants={event.participants}
+                                    currentParticipantId={participant.id}
+                                    confirmedSlotId={event.slots.find(s => s.status === 'confirmed')?.id}
+                                />
+                            )}
                         </div>
                     ) : (
                         <p>日程調整中...</p>

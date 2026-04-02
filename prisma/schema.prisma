@@ -19,6 +19,7 @@ model Event {
   participationMode     String        @default("normal")
   cancelDeadlineMinutes Int           @default(1440)
   receptionType         String        @default("qr")
+  showParticipants      Boolean       @default(true)
   paymentEnabled        Boolean       @default(false)
   status                String        @default("draft")
   location              String?
