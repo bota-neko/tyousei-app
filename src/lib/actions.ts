@@ -36,20 +36,17 @@ export async function createEvent(formData: FormData) {
 }
 
 export async function addEventSlot(eventId: string, formData: FormData) {
-    const startStr = formData.get('start') as string
-    const endStr = formData.get('end') as string
+    const dateStr = formData.get('date') as string
+    const startTime = formData.get('startTime') as string
+    const endTime = formData.get('endTime') as string
 
-    // Simple validation
-    if (!startStr || !endStr) return
+    if (!dateStr || !startTime || !endTime) return
 
-    // Ensure it's treated as JST by appending +09:00 if not present
-    const start = new Date(startStr.includes('Z') || startStr.includes('+') ? startStr : `${startStr}+09:00`)
-    const end = new Date(endStr.includes('Z') || endStr.includes('+') ? endStr : `${endStr}+09:00`)
+    // Times are local JST. We combine them: date + time + +09:00
+    const start = new Date(`${dateStr}T${startTime}:00+09:00`)
+    const end = new Date(`${dateStr}T${endTime}:00+09:00`)
 
-    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
-        // Invalid date format
-        return
-    }
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) return
 
     await prisma.eventSlot.create({
         data: {
@@ -61,6 +58,51 @@ export async function addEventSlot(eventId: string, formData: FormData) {
     })
 
     revalidatePath(`/events/${eventId}/dashboard`)
+    redirect(`/events/${eventId}/dashboard?updated=true`)
+}
+
+export async function batchAddEventSlots(eventId: string, formData: FormData) {
+    const startDateStr = formData.get('startDate') as string
+    const endDateStr = formData.get('endDate') as string
+    const startTime = formData.get('startTime') as string
+    const endTime = formData.get('endTime') as string
+
+    if (!startDateStr || !endDateStr || !startTime || !endTime) return
+
+    const startDate = new Date(startDateStr)
+    const endDate = new Date(endDateStr)
+    
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) return
+    
+    // Iterate through dates
+    const currentDate = new Date(startDate)
+    const slots = []
+
+    while (currentDate <= endDate) {
+        const dateStr = currentDate.toISOString().split('T')[0]
+        const start = new Date(`${dateStr}T${startTime}:00+09:00`)
+        const end = new Date(`${dateStr}T${endTime}:00+09:00`)
+        
+        if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
+            slots.push({
+                eventId,
+                start,
+                end,
+                status: 'candidate'
+            })
+        }
+        
+        currentDate.setDate(currentDate.getDate() + 1)
+    }
+
+    if (slots.length > 0) {
+        await prisma.eventSlot.createMany({
+            data: slots
+        })
+    }
+
+    revalidatePath(`/events/${eventId}/dashboard`)
+    redirect(`/events/${eventId}/dashboard?updated=true`)
 }
 
 export async function deleteEventSlot(slotId: string, eventId: string) {

@@ -1,6 +1,7 @@
 'use client'
 
 import { deleteEvent } from '@/lib/actions'
+import { useTransition } from 'react'
 
 type Props = {
     eventId: string
@@ -8,21 +9,25 @@ type Props = {
 }
 
 export default function DeleteEventButton({ eventId, label = 'イベントを削除' }: Props) {
+    const [isPending, startTransition] = useTransition()
+
     const handleDelete = async () => {
         if (!confirm('本当にこのイベントを削除しますか？\nこの操作は取り消せません。')) return
 
-        // Remove from localStorage
-        try {
-            const key = 'tyousei_my_events'
-            const stored = localStorage.getItem(key)
-            if (stored) {
-                const events = JSON.parse(stored)
-                delete events[eventId]
-                localStorage.setItem(key, JSON.stringify(events))
-            }
-        } catch { /* ignore */ }
+        startTransition(async () => {
+            // Remove from localStorage
+            try {
+                const key = 'tyousei_my_events'
+                const stored = localStorage.getItem(key)
+                if (stored) {
+                    const events = JSON.parse(stored)
+                    delete events[eventId]
+                    localStorage.setItem(key, JSON.stringify(events))
+                }
+            } catch { /* ignore */ }
 
-        await deleteEvent(eventId)
+            await deleteEvent(eventId)
+        })
     }
 
     return (
